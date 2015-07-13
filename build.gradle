@@ -1,0 +1,69 @@
+import groovy.sql.Sql
+import groovy.xml.MarkupBuilder
+import org.h2.Driver
+import org.jooq.util.GenerationTool
+
+import javax.xml.bind.JAXB
+
+buildscript {
+    ext.kotlin_version = '0.12.613'
+    ext.jooq_version = '3.6.2'
+    ext.h2_version = '1.4.187'
+
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jooq:jooq-codegen:$jooq_version"
+        classpath "com.h2database:h2:$h2_version"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+apply plugin: "java"
+apply plugin: "kotlin"
+apply plugin: 'maven'
+group = 'com.github.sungmin-park'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    compile "org.jooq:jooq:$jooq_version"
+
+    testCompile "com.h2database:h2:$h2_version"
+    testCompile 'junit:junit:4.11'
+}
+
+def sql = new Sql(new Driver().connect('jdbc:h2:mem:test-jooq-codegen', null))
+try {
+    sql.execute(new File('src/test/resources/db.sql').text)
+    def writer = new StringWriter()
+    def xml = new MarkupBuilder(writer)
+            .configuration('xmlns': 'http://www.jooq.org/xsd/jooq-codegen-3.6.0.xsd') {
+        jdbc() {
+            driver('org.h2.Driver')
+            url('jdbc:h2:mem:test-jooq-codegen')
+        }
+        generator() {
+            database() {
+                name('org.jooq.util.h2.H2Database')
+                inputSchema('PUBLIC')
+            }
+            generate() {
+            }
+            target() {
+                packageName('org.jooq.orm.database')
+                directory('src/test/java')
+            }
+        }
+    }
+    GenerationTool.main(
+            JAXB.unmarshal(new StringReader(writer.toString()), org.jooq.util.jaxb.Configuration.class)
+    )
+} finally {
+    sql.close()
+}
