@@ -38,7 +38,7 @@ dependencies {
     testCompile 'junit:junit:4.11'
 }
 
-def sql = new Sql(new Driver().connect('jdbc:h2:mem:test-jooq-codegen', null))
+def sql = new Sql(new Driver().connect('jdbc:h2:mem:test-jooq-tools', null))
 try {
     sql.execute(new File('src/test/resources/db.sql').text)
     def writer = new StringWriter()
@@ -46,7 +46,7 @@ try {
             .configuration('xmlns': 'http://www.jooq.org/xsd/jooq-codegen-3.6.0.xsd') {
         jdbc() {
             driver('org.h2.Driver')
-            url('jdbc:h2:mem:test-jooq-codegen')
+            url('jdbc:h2:mem:test-jooq-tools')
         }
         generator() {
             database() {
@@ -56,7 +56,7 @@ try {
             generate() {
             }
             target() {
-                packageName('org.jooq.orm.database')
+                packageName('com.github.parksungmin.jooq.tools.database')
                 directory('src/test/java')
             }
         }

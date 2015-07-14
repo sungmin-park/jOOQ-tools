@@ -1,7 +1,7 @@
 .gradle/
 build/
 
-src/test/java/org/jooq/orm/database
+src/test/java/com/github/parksungmin/jooq/tools/database
 
 .idea/
 *.iml
