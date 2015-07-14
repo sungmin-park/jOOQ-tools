@@ -1,10 +1,7 @@
 package com.github.parksungmin.jooq.tools
 
 import com.github.parksungmin.jooq.tools.database.Tables
-import com.github.parksungmin.jooq.tools.database.tables.records.UserRecord
 import org.h2.Driver
-import org.jooq.Record
-import org.jooq.RecordMapper
 import org.jooq.SQLDialect
 import org.jooq.impl.DSL
 import org.junit.Assert
@@ -20,13 +17,15 @@ class PaginationTest {
             create.execute(File("src/test/resources/db.sql").readText())
 
             val query = create.selectFrom(Tables.USER).orderBy(Tables.USER.ID)
-            val users = Pagination.of(query, 0) {
-                User(it.getId(), it.getName())
-            }
-            Assert.assertEquals(1, users.rows[0].id)
-            Assert.assertEquals("Maia", users.rows[0].name)
-            Assert.assertEquals(10, users.rows[9].id)
-            Assert.assertEquals("Julian", users.rows[9].name)
+            val users0 = Pagination.of(query, 0) { User(it.getId(), it.getName()) }
+            Assert.assertEquals(1, users0.rows[0].id)
+            Assert.assertEquals("Maia", users0.rows[0].name)
+            Assert.assertEquals(10, users0.rows[9].id)
+            Assert.assertEquals("Julian", users0.rows[9].name)
+
+            val users1 = Pagination.of(query, 1) { User(it.getId(), it.getName()) }
+            Assert.assertEquals(11, users1.rows[0].id)
+            Assert.assertEquals(20, users1.rows[9].id)
         } finally {
             connection.close()
         }
