@@ -13,3 +13,7 @@ INSERT INTO "user" (name) VALUES ('Hiroko'),('Omar'),('Kelly'),('Jocelyn'),('Dom
 INSERT INTO "user" (name) VALUES ('Galena'),('Kevin'),('Aurelia'),('Charde'),('Roth'),('Ruth'),('Amela'),('Aphrodite'),('Lois'),('Madeson');
 INSERT INTO "user" (name) VALUES ('Georgia'),('Peter'),('Melvin'),('Plato'),('Griffin'),('Timothy'),('Michael'),('Kai'),('Chaim'),('Wyoming');
 INSERT INTO "user" (name) VALUES ('Ray'),('Gabriel'),('Natalie'),('Tarik'),('Odysseus'),('Lydia'),('Jeremy'),('Destiny'),('McKenzie'),('Ronan');
+
+INSERT INTO "user" (name) VALUES ('Galena'),('Kevin'),('Aurelia'),('Charde'),('Roth'),('Ruth'),('Amela'),('Aphrodite'),('Lois'),('Madeson');
+INSERT INTO "user" (name) VALUES ('Georgia'),('Peter'),('Melvin'),('Plato'),('Griffin'),('Timothy'),('Michael'),('Kai'),('Chaim'),('Wyoming');
+INSERT INTO "user" (name) VALUES ('Ray'),('Gabriel'),('Natalie');
