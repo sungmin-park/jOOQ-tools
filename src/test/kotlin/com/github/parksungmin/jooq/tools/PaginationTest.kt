@@ -2,6 +2,7 @@ package com.github.parksungmin.jooq.tools
 
 import com.github.parksungmin.jooq.tools.database.Tables
 import org.h2.Driver
+import org.jooq.DSLContext
 import org.jooq.SQLDialect
 import org.jooq.impl.DSL
 import org.junit.Assert
@@ -9,13 +10,20 @@ import org.junit.Test
 import java.io.File
 
 class PaginationTest {
-    Test
-    fun testPaginationOf() {
+    fun db(run: (create: DSLContext) -> Unit) {
         val connection = Driver().connect("jdbc:h2:mem:test-jooq-tools", null)
         try {
             val create = DSL.using(connection, SQLDialect.H2);
             create.execute(File("src/test/resources/db.sql").readText())
+            run(create)
+        } finally {
+            connection.close()
+        }
+    }
 
+    Test
+    fun testPaginationOf() {
+        db { create ->
             val pages = (0..9).toList()
             val users0 = Pagination.of(create.selectFrom(Tables.USER).orderBy(Tables.USER.ID), 0) { User(it.getId(), it.getName()) }
             Assert.assertEquals(123, users0.totalCount)
@@ -54,7 +62,7 @@ class PaginationTest {
             Assert.assertEquals(10, users2.navigation.nextNavigation)
             Assert.assertEquals(12, users2.navigation.last)
 
-            val users10 = Pagination.of(create.selectFrom(Tables.USER).orderBy(Tables.USER.ID), 10) { User(it.getId(), it.getName())}
+            val users10 = Pagination.of(create.selectFrom(Tables.USER).orderBy(Tables.USER.ID), 10) { User(it.getId(), it.getName()) }
             Assert.assertEquals(10, users10.navigation.current)
             Assert.assertEquals(0, users10.navigation.first)
             Assert.assertEquals(9, users10.navigation.previousNavigation)
@@ -64,7 +72,7 @@ class PaginationTest {
             Assert.assertEquals(12, users10.navigation.nextNavigation)
             Assert.assertEquals(12, users10.navigation.last)
 
-            val users12 = Pagination.of(create.selectFrom(Tables.USER).orderBy(Tables.USER.ID), 12) { User(it.getId(), it.getName())}
+            val users12 = Pagination.of(create.selectFrom(Tables.USER).orderBy(Tables.USER.ID), 12) { User(it.getId(), it.getName()) }
             Assert.assertEquals(12, users12.navigation.current)
             Assert.assertEquals(0, users12.navigation.first)
             Assert.assertEquals(9, users12.navigation.previousNavigation)
@@ -73,8 +81,21 @@ class PaginationTest {
             Assert.assertEquals(12, users12.navigation.next)
             Assert.assertEquals(12, users12.navigation.nextNavigation)
             Assert.assertEquals(12, users12.navigation.last)
-        } finally {
-            connection.close()
+        }
+    }
+
+    Test
+    fun testEmptyPaginationOf() {
+        db { create ->
+            val users = Pagination.of(create.selectFrom(Tables.USER).where(Tables.USER.ID.lt(0)), 0) { User(it.getId(), it.getName()) }
+            Assert.assertEquals(0, users.navigation.current)
+            Assert.assertEquals(0, users.navigation.first)
+            Assert.assertEquals(0, users.navigation.previousNavigation)
+            Assert.assertEquals(0, users.navigation.previous)
+            Assert.assertEquals(listOf(0), users.navigation.pages)
+            Assert.assertEquals(0, users.navigation.next)
+            Assert.assertEquals(0, users.navigation.nextNavigation)
+            Assert.assertEquals(0, users.navigation.last)
         }
     }
 
