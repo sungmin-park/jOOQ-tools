@@ -6,7 +6,7 @@ import org.jooq.util.GenerationTool
 import javax.xml.bind.JAXB
 
 buildscript {
-    ext.kotlin_version = '0.12.1230'
+    ext.kotlin_version = '0.12.613'
     ext.jooq_version = '3.6.2'
     ext.h2_version = '1.4.187'
 
