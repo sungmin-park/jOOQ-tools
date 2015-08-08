@@ -6,7 +6,7 @@ import org.jooq.util.GenerationTool
 import javax.xml.bind.JAXB
 
 buildscript {
-    ext.kotlin_version = '0.12.613'
+    ext.kotlin_version = '0.12.1230'
     ext.jooq_version = '3.6.2'
     ext.h2_version = '1.4.187'
 
@@ -36,6 +36,10 @@ dependencies {
 
     testCompile "com.h2database:h2:$h2_version"
     testCompile 'junit:junit:4.11'
+}
+
+sourceSets {
+    main.java.srcDirs += 'src/main/kotlin'
 }
 
 def sql = new Sql(new Driver().connect('jdbc:h2:mem:test-jooq-tools', null))

@@ -92,10 +92,20 @@ class PaginationTest {
             Assert.assertEquals(0, users.navigation.first)
             Assert.assertEquals(0, users.navigation.previousNavigation)
             Assert.assertEquals(0, users.navigation.previous)
-            Assert.assertEquals(listOf(0), users.navigation.pages)
+            Assert.assertEquals((0..0).toList(), users.navigation.pages)
             Assert.assertEquals(0, users.navigation.next)
             Assert.assertEquals(0, users.navigation.nextNavigation)
             Assert.assertEquals(0, users.navigation.last)
+        }
+    }
+
+    Test
+    fun testNumberOfRowsPerPage() {
+        db { create ->
+            val users = Pagination.of(create.selectFrom(Tables.USER).where(Tables.USER.ID.lt(0)), 0, numberOfRowsPerPage = 20) {
+                User(it.getId(), it.getName())
+            }
+            Assert.assertEquals(0, users.rows.size())
         }
     }
 
