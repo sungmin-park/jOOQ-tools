@@ -25,7 +25,7 @@ class PaginationTest {
     fun testPaginationOf() {
         db { create ->
             val pages = (0..9).toList()
-            val users0 = Pagination.of(create.selectFrom(Tables.USER).orderBy(Tables.USER.ID), 0) { User(it.getId(), it.getName()) }
+            val users0 = Pagination.of(create.selectFrom(Tables.USER).orderBy(Tables.USER.ID), 0) { User(it.id, it.name) }
             Assert.assertEquals(123, users0.totalCount)
             Assert.assertEquals(1, users0.rows[0].id)
             Assert.assertEquals("Maia", users0.rows[0].name)
@@ -40,7 +40,7 @@ class PaginationTest {
             Assert.assertEquals(10, users0.navigation.nextNavigation)
             Assert.assertEquals(12, users0.navigation.last)
 
-            val users1 = Pagination.of(create.selectFrom(Tables.USER).orderBy(Tables.USER.ID), 1) { User(it.getId(), it.getName()) }
+            val users1 = Pagination.of(create.selectFrom(Tables.USER).orderBy(Tables.USER.ID), 1) { User(it.id, it.name) }
             Assert.assertEquals(11, users1.rows[0].id)
             Assert.assertEquals(20, users1.rows[9].id)
             Assert.assertEquals(1, users1.navigation.current)
@@ -52,7 +52,7 @@ class PaginationTest {
             Assert.assertEquals(10, users1.navigation.nextNavigation)
             Assert.assertEquals(12, users1.navigation.last)
 
-            val users2 = Pagination.of(create.selectFrom(Tables.USER).orderBy(Tables.USER.ID), 2) { User(it.getId(), it.getName()) }
+            val users2 = Pagination.of(create.selectFrom(Tables.USER).orderBy(Tables.USER.ID), 2) { User(it.id, it.name) }
             Assert.assertEquals(2, users2.navigation.current)
             Assert.assertEquals(0, users2.navigation.first)
             Assert.assertEquals(0, users2.navigation.previousNavigation)
@@ -62,7 +62,7 @@ class PaginationTest {
             Assert.assertEquals(10, users2.navigation.nextNavigation)
             Assert.assertEquals(12, users2.navigation.last)
 
-            val users10 = Pagination.of(create.selectFrom(Tables.USER).orderBy(Tables.USER.ID), 10) { User(it.getId(), it.getName()) }
+            val users10 = Pagination.of(create.selectFrom(Tables.USER).orderBy(Tables.USER.ID), 10) { User(it.id, it.name) }
             Assert.assertEquals(10, users10.navigation.current)
             Assert.assertEquals(0, users10.navigation.first)
             Assert.assertEquals(9, users10.navigation.previousNavigation)
@@ -72,7 +72,7 @@ class PaginationTest {
             Assert.assertEquals(12, users10.navigation.nextNavigation)
             Assert.assertEquals(12, users10.navigation.last)
 
-            val users12 = Pagination.of(create.selectFrom(Tables.USER).orderBy(Tables.USER.ID), 12) { User(it.getId(), it.getName()) }
+            val users12 = Pagination.of(create.selectFrom(Tables.USER).orderBy(Tables.USER.ID), 12) { User(it.id, it.name) }
             Assert.assertEquals(12, users12.navigation.current)
             Assert.assertEquals(0, users12.navigation.first)
             Assert.assertEquals(9, users12.navigation.previousNavigation)
@@ -87,7 +87,7 @@ class PaginationTest {
     @Test
     fun testEmptyPaginationOf() {
         db { create ->
-            val users = Pagination.of(create.selectFrom(Tables.USER).where(Tables.USER.ID.lt(0)), 0) { User(it.getId(), it.getName()) }
+            val users = Pagination.of(create.selectFrom(Tables.USER).where(Tables.USER.ID.lt(0)), 0) { User(it.id, it.name) }
             Assert.assertEquals(0, users.navigation.current)
             Assert.assertEquals(0, users.navigation.first)
             Assert.assertEquals(0, users.navigation.previousNavigation)
@@ -103,7 +103,7 @@ class PaginationTest {
     fun testNumberOfRowsPerPage() {
         db { create ->
             val users = Pagination.of(create.selectFrom(Tables.USER).where(Tables.USER.ID.lt(0)), 0, numberOfRowsPerPage = 20) {
-                User(it.getId(), it.getName())
+                User(it.id, it.name)
             }
             Assert.assertEquals(0, users.rows.size())
         }

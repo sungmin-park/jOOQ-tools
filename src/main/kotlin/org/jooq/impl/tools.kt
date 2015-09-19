@@ -3,8 +3,11 @@ package org.jooq.impl
 import org.jooq.DSLContext
 import org.jooq.Select
 
-fun Select<*>.dslContext(): DSLContext {
-    val configuration = ((this as AbstractDelegatingQuery<*>).getDelegate() as AbstractQuery).configuration()
-    return DSL.using(configuration)
+object tools {
+    fun dslContext(select: Select<*>): DSLContext {
+        val configuration = ((select as AbstractDelegatingQuery<*>).delegate as AbstractQuery).configuration()
+        return DSL.using(configuration)
+    }
 }
 
+fun Select<*>.dslContext(): DSLContext = tools.dslContext(this)
