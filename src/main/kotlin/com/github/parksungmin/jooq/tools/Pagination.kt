@@ -3,14 +3,13 @@ package com.github.parksungmin.jooq.tools
 import org.jooq.Record
 import org.jooq.SelectLimitStep
 import org.jooq.impl.dslContext
-import kotlin.platform.platformStatic
 
 public class Pagination<E>(public val page: Int, public val rows: List<E>, public val totalCount: Int, numberOfRowsPerPage: Int, numberOfPagesPerNavigation: Int) {
     public val navigation: Navigation = Navigation(page, totalCount, numberOfRowsPerPage, numberOfPagesPerNavigation)
 
     companion object {
-        platformStatic
-        jvmOverloads
+        @JvmStatic
+        @JvmOverloads
         public fun <R : Record, E> of(query: SelectLimitStep<R>, page: Int, numberOfRowsPerPage: Int = 10,
                                       numberOfPagesPerNavigation: Int = 10,
                                       mapper: (record: R) -> E): Pagination<E> {
@@ -27,9 +26,9 @@ public class Pagination<E>(public val page: Int, public val rows: List<E>, publi
         val next: Int = Math.min(current + 1, last)
         public val previous: Int = Math.max((current - 1), 0)
         public val pages: List<Int> = {
-                val firstOnPages = (current - (current % numberOfPagesPerNavigation))
-                val lastOnPages = Math.min(firstOnPages + numberOfPagesPerNavigation - 1, last)
-                (firstOnPages..lastOnPages).toList()
+            val firstOnPages = (current - (current % numberOfPagesPerNavigation))
+            val lastOnPages = Math.min(firstOnPages + numberOfPagesPerNavigation - 1, last)
+            (firstOnPages..lastOnPages).toList()
         }()
         public val previousNavigation: Int = Math.max(pages[0] - 1, first)
         public val nextNavigation: Int = Math.min(pages.last() + 1, last)

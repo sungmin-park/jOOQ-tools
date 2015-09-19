@@ -6,7 +6,7 @@ import org.jooq.util.GenerationTool
 import javax.xml.bind.JAXB
 
 buildscript {
-    ext.kotlin_version = '0.12.613'
+    ext.kotlin_version = '0.13.1513'
     ext.jooq_version = '3.6.2'
     ext.h2_version = '1.4.187'
 
@@ -31,6 +31,7 @@ repositories {
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     compile "org.jooq:jooq:$jooq_version"
 

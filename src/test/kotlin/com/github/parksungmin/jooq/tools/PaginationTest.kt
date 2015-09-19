@@ -21,7 +21,7 @@ class PaginationTest {
         }
     }
 
-    Test
+    @Test
     fun testPaginationOf() {
         db { create ->
             val pages = (0..9).toList()
@@ -84,7 +84,7 @@ class PaginationTest {
         }
     }
 
-    Test
+    @Test
     fun testEmptyPaginationOf() {
         db { create ->
             val users = Pagination.of(create.selectFrom(Tables.USER).where(Tables.USER.ID.lt(0)), 0) { User(it.getId(), it.getName()) }
@@ -99,7 +99,7 @@ class PaginationTest {
         }
     }
 
-    Test
+    @Test
     fun testNumberOfRowsPerPage() {
         db { create ->
             val users = Pagination.of(create.selectFrom(Tables.USER).where(Tables.USER.ID.lt(0)), 0, numberOfRowsPerPage = 20) {
