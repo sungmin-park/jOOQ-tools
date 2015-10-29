@@ -105,7 +105,7 @@ class PaginationTest {
             val users = Pagination.of(create.selectFrom(Tables.USER).where(Tables.USER.ID.lt(0)), 0, numberOfRowsPerPage = 20) {
                 User(it.id, it.name)
             }
-            Assert.assertEquals(0, users.rows.size())
+            Assert.assertEquals(0, users.rows.size)
         }
     }
 

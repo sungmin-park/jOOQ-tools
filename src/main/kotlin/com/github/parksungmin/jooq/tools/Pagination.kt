@@ -19,7 +19,7 @@ public class Pagination<E>(public val page: Int, public val rows: List<E>, publi
         }
     }
 
-    public data class Navigation(public val current: Int, totalCount: Int, numberOfRowsPerPage: Int, numberOfPagesPerNavigation: Int) {
+    public data class Navigation(val current: Int, val totalCount: Int, val numberOfRowsPerPage: Int, val numberOfPagesPerNavigation: Int) {
         public val first: Int = 0
         // lastPage number inclusive
         public val last: Int = Math.max(((totalCount / numberOfRowsPerPage) + Math.min(1, totalCount % numberOfRowsPerPage)) - 1, 0)
